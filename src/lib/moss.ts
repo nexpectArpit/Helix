@@ -9,14 +9,36 @@ let mossInstance: any = null;
 
 function getMossClient(): MossClientType {
   if (!mossInstance) {
-    // Dynamically require the SDK to avoid native module load at build-time
-    const { MossClient } = require("@moss-dev/moss");
-    const projectId = process.env.MOSS_PROJECT_ID;
-    const projectKey = process.env.MOSS_PROJECT_KEY;
-    if (!projectId || !projectKey) {
-      console.warn("WARNING: MOSS_PROJECT_ID or MOSS_PROJECT_KEY environment variables are missing.");
+    try {
+      // Dynamically require the SDK to avoid native module load at build-time
+      const { MossClient } = require("@moss-dev/moss");
+      const projectId = process.env.MOSS_PROJECT_ID;
+      const projectKey = process.env.MOSS_PROJECT_KEY;
+      if (!projectId || !projectKey) {
+        console.warn("WARNING: MOSS_PROJECT_ID or MOSS_PROJECT_KEY environment variables are missing.");
+      }
+      mossInstance = new MossClient(projectId || "dummy", projectKey || "dummy");
+    } catch (error) {
+      console.warn("[MOSS_SDK_LOAD_WARN] Failed to load Moss SDK (native binary issue or missing package). Falling back to mock client:", error);
+      
+      // Mock client that behaves safely to allow ingestion/diagnose local fallback to work
+      mossInstance = {
+        listIndexes: async () => [],
+        createIndex: async () => ({ job_id: "mock-job-id" }),
+        addDocs: async () => ({ job_id: "mock-job-id" }),
+        loadIndex: async () => {},
+        getJobStatus: async () => ({ status: "COMPLETED" }),
+        query: async () => { throw new Error("Moss unavailable - using local fallback"); },
+        deleteIndex: async () => true,
+        deleteDocs: async () => {},
+        getDocs: async () => [],
+        session: () => ({
+          addDocs: async () => {},
+          query: async () => ({ docs: [] }),
+          pushIndex: async () => {}
+        })
+      };
     }
-    mossInstance = new MossClient(projectId || "dummy", projectKey || "dummy");
   }
   return mossInstance;
 }
