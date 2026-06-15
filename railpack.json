@@ -1,0 +1,8 @@
+{
+  "aptPackages": [
+    "fontconfig",
+    "ttf-dejavu",
+    "libpixman-1-0",
+    "libpng16-16"
+  ]
+}
