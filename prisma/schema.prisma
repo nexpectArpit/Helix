@@ -1,0 +1,148 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  password      String
+  name          String
+  role          String        @default("USER") // "USER" or "COMPANY_ADMIN"
+  company       Company?      @relation(fields: [companyId], references: [id])
+  companyId     String?
+  sessions      DiagnosticSession[]
+  ownedProducts UserProduct[]
+  createdAt     DateTime      @default(now())
+}
+
+model Company {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  logo        String?
+  members     User[]
+  products    Product[]
+  createdAt   DateTime  @default(now())
+}
+
+model Product {
+  id               String             @id @default(cuid())
+  name             String
+  category         String
+  description      String
+  image            String?
+  company          Company            @relation(fields: [companyId], references: [id])
+  companyId        String
+  mossIndexName    String?
+  uploads          Upload[]
+  sessions         DiagnosticSession[]
+  owners           UserProduct[]
+  maintenanceTasks MaintenanceTask[]
+  recallAlerts     RecallAlert[]
+  spareParts       SparePart[]
+  warrantyDays     Int                @default(365)
+  createdAt        DateTime           @default(now())
+}
+
+model Upload {
+  id          String   @id @default(cuid())
+  fileName    String
+  fileType    String   // "PDF", "TEXT", "IMAGE", "VIDEO", "LINK"
+  filePath    String
+  externalUrl String?
+  mimeType    String?
+  sizeBytes   Int?
+  indexed     Boolean  @default(false)
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String
+  createdAt   DateTime @default(now())
+}
+
+model DiagnosticSession {
+  id              String   @id @default(cuid())
+  mossSessionName String?
+  product         Product  @relation(fields: [productId], references: [id])
+  productId       String
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  messages        String   @default("[]") // JSON string representation of messages [{role, content, sources}]
+  status          String   @default("active")
+  resolution      String?
+  resolvedAt      DateTime?
+  diagnosticState String   @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ─── Advanced Feature Models ───────────────────────────────────────────
+
+model UserProduct {
+  id              String           @id @default(cuid())
+  user            User             @relation(fields: [userId], references: [id])
+  userId          String
+  product         Product          @relation(fields: [productId], references: [id])
+  productId       String
+  purchaseDate    DateTime?
+  serialNumber    String?
+  warrantyExpiry  DateTime?
+  notes           String?
+  maintenanceLogs MaintenanceLog[]
+  createdAt       DateTime         @default(now())
+
+  @@unique([userId, productId])
+}
+
+model MaintenanceTask {
+  id             String           @id @default(cuid())
+  product        Product          @relation(fields: [productId], references: [id])
+  productId      String
+  title          String
+  description    String?
+  intervalMonths Int
+  sourceDocument String?
+  sourceExcerpt  String?
+  isApproved     Boolean          @default(false)
+  logs           MaintenanceLog[]
+  createdAt      DateTime         @default(now())
+}
+
+model MaintenanceLog {
+  id                String          @id @default(cuid())
+  userProduct       UserProduct     @relation(fields: [userProductId], references: [id], onDelete: Cascade)
+  userProductId     String
+  maintenanceTask   MaintenanceTask @relation(fields: [maintenanceTaskId], references: [id], onDelete: Cascade)
+  maintenanceTaskId String
+  completedAt       DateTime        @default(now())
+  notes             String?
+}
+
+model RecallAlert {
+  id          String    @id @default(cuid())
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   String
+  title       String
+  description String
+  severity    String    @default("info") // "info" | "warning" | "critical"
+  isActive    Boolean   @default(true)
+  publishedAt DateTime  @default(now())
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+model SparePart {
+  id             String   @id @default(cuid())
+  product        Product  @relation(fields: [productId], references: [id])
+  productId      String
+  partName       String
+  partNumber     String?
+  category       String?
+  cost           Float?
+  description    String?
+  sourceDocument String?
+  createdAt      DateTime @default(now())
+}
