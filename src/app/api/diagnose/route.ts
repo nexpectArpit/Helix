@@ -195,49 +195,44 @@ export async function POST(request: NextRequest) {
     const contextQuery = buildRetrievalQuery(previousState, message);
 
     try {
-      const indexList = await moss.listIndexes();
-      const indexExists = indexList.some((idx: any) => idx.name === indexName);
+      // Build metadata-aware filter combining inferred component
+      const inferredComponent = extractComponentFromState(previousState);
+      
+      // Construct filter: optionally filter by component
+      let queryFilter: any;
+      if (inferredComponent) {
+        queryFilter = {
+          field: "component",
+          condition: { $eq: inferredComponent }
+        };
+      }
 
-      if (indexExists) {
-        // Build metadata-aware filter combining inferred component
-        const inferredComponent = extractComponentFromState(previousState);
-        
-        // Construct filter: optionally filter by component
-        let queryFilter: any;
-        if (inferredComponent) {
-          queryFilter = {
-            field: "component",
-            condition: { $eq: inferredComponent }
-          };
-        }
-
-        // Primary query with metadata filter
-        const searchResults = await safeQuery(indexName, contextQuery, {
+      // Primary query with metadata filter
+      const searchResults = await safeQuery(indexName, contextQuery, {
+        top_k: 6,
+        alpha: 0.8,
+        filter: queryFilter
+      });
+      if (searchResults && searchResults.docs) {
+        retrievedDocs = searchResults.docs;
+      }
+      
+      // Fallback: if metadata-filtered query returned too few results, broaden search
+      if (retrievedDocs.length < 2 && inferredComponent) {
+        console.log(`[RETRIEVAL_FALLBACK] Component filter "${inferredComponent}" returned ${retrievedDocs.length} docs, broadening...`);
+        const broadResults = await safeQuery(indexName, contextQuery, {
           top_k: 6,
-          alpha: 0.8,
-          filter: queryFilter
+          alpha: 0.8
         });
-        if (searchResults && searchResults.docs) {
-          retrievedDocs = searchResults.docs;
-        }
-        
-        // Fallback: if metadata-filtered query returned too few results, broaden search
-        if (retrievedDocs.length < 2 && inferredComponent) {
-          console.log(`[RETRIEVAL_FALLBACK] Component filter "${inferredComponent}" returned ${retrievedDocs.length} docs, broadening...`);
-          const broadResults = await safeQuery(indexName, contextQuery, {
-            top_k: 6,
-            alpha: 0.8
-          });
-          if (broadResults && broadResults.docs && broadResults.docs.length > retrievedDocs.length) {
-            // Merge unique docs, preferring component-matched ones
-            const existingIds = new Set(retrievedDocs.map((d: any) => d.id));
-            for (const doc of broadResults.docs) {
-              if (!existingIds.has(doc.id)) {
-                retrievedDocs.push(doc);
-              }
+        if (broadResults && broadResults.docs && broadResults.docs.length > retrievedDocs.length) {
+          // Merge unique docs, preferring component-matched ones
+          const existingIds = new Set(retrievedDocs.map((d: any) => d.id));
+          for (const doc of broadResults.docs) {
+            if (!existingIds.has(doc.id)) {
+              retrievedDocs.push(doc);
             }
-            retrievedDocs = retrievedDocs.slice(0, 8); // Cap at 8
           }
+          retrievedDocs = retrievedDocs.slice(0, 8); // Cap at 8
         }
       }
     } catch (mossErr: any) {

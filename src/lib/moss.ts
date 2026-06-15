@@ -234,9 +234,13 @@ export async function safeQuery(
     console.warn(`[MOSS_QUERY_FALLBACK] Moss query failed: ${error.message || String(error)}. Triggering local database fallback search.`);
     
     try {
-      // 1. Extract productId from query filter
+      // 1. Extract productId from query filter or indexName
       let productId = "";
-      if (options.filter) {
+      if (indexName.startsWith("product-") && indexName.endsWith("-kb")) {
+        productId = indexName.slice("product-".length, -"-kb".length);
+      }
+
+      if (!productId && options.filter) {
         if (options.filter.field === "product_id") {
           const cond = options.filter.condition;
           productId = typeof cond === "object" && cond !== null ? (cond.$eq || cond) : cond;
