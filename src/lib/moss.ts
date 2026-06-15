@@ -1,19 +1,41 @@
-import { MossClient } from "@moss-dev/moss";
+import type { MossClient as MossClientType } from "@moss-dev/moss";
 import { db } from "@/lib/db";
 import fs from "fs/promises";
 import path from "path";
 import { PDFParse } from "pdf-parse";
 import { chunkText } from "@/lib/chunker";
 
-const projectId = process.env.MOSS_PROJECT_ID;
-const projectKey = process.env.MOSS_PROJECT_KEY;
+let mossInstance: any = null;
 
-if (!projectId || !projectKey) {
-  console.warn("WARNING: MOSS_PROJECT_ID or MOSS_PROJECT_KEY environment variables are missing.");
+function getMossClient(): MossClientType {
+  if (!mossInstance) {
+    // Dynamically require the SDK to avoid native module load at build-time
+    const { MossClient } = require("@moss-dev/moss");
+    const projectId = process.env.MOSS_PROJECT_ID;
+    const projectKey = process.env.MOSS_PROJECT_KEY;
+    if (!projectId || !projectKey) {
+      console.warn("WARNING: MOSS_PROJECT_ID or MOSS_PROJECT_KEY environment variables are missing.");
+    }
+    mossInstance = new MossClient(projectId || "dummy", projectKey || "dummy");
+  }
+  return mossInstance;
 }
 
-// Export the singleton instance
-export const moss = new MossClient(projectId || "dummy", projectKey || "dummy");
+// Export the singleton proxy instance
+export const moss = new Proxy({} as any, {
+  get(target, prop, receiver) {
+    const client = getMossClient();
+    const value = Reflect.get(client, prop, receiver);
+    if (typeof value === "function") {
+      return value.bind(client);
+    }
+    return value;
+  },
+  set(target, prop, value, receiver) {
+    const client = getMossClient();
+    return Reflect.set(client, prop, value, receiver);
+  }
+}) as unknown as MossClientType;
 
 /**
  * Polls the job status until it completes, fails, or times out.
