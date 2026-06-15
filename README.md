@@ -1,241 +1,487 @@
 <div align="center">
 
-<br/>
+# 🚀 Helix
 
-```
-███╗   ███╗ █████╗ ███╗   ██╗████████╗██╗███████╗
-████╗ ████║██╔══██╗████╗  ██║╚══██╔══╝██║██╔════╝
-██╔████╔██║███████║██╔██╗ ██║   ██║   ██║███████╗
-██║╚██╔╝██║██╔══██║██║╚██╗██║   ██║   ██║╚════██║
-██║ ╚═╝ ██║██║  ██║██║ ╚████║   ██║   ██║███████║
-╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚══════╝
-```
+### Product Troubleshooting. Solved by Intelligence.
 
-### **Assistant for Your Products**
-*24-Hour Hackathon*
+> An AI-powered diagnostic platform that transforms manuals, documentation, support articles, and technical resources into an intelligent troubleshooting engineer.
 
-<br/>
+<p align="center">
+  <img src="https://img.shields.io/badge/Hackathon-24%20Hours-blue?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/MOSS-Powered-success?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Groq-Llama%203.3-purple?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge"/>
+</p>
 
-[![Build in 24hrs](https://img.shields.io/badge/Build%20In-24%20Hours-7B2FBE?style=for-the-badge&logoColor=white)]()
-[![Status](https://img.shields.io/badge/Status-Active-00C896?style=for-the-badge)]()
-
-<br/>
-
----
+### Built for PClub × MOSS Hackathon
 
 </div>
 
-## Background
+---
 
-People use all kinds of products every day, including scooters, air conditioners, washing machines, water purifiers, consumer electronics, and industrial equipment. When something goes wrong or requires maintenance, finding the right answer is surprisingly difficult.
+# 📖 Overview
 
-Manuals are lengthy and difficult to navigate. Information is scattered across PDFs, websites, videos, and support portals. Most users give up and call a technician for issues they could have resolved themselves if they knew where to find the right information.
+Helix is an intelligent product support platform designed to help users diagnose, troubleshoot, and resolve product issues using official manufacturer documentation.
 
-> **The information already exists. The problem is access.**
+Instead of behaving like a traditional chatbot, Helix acts as a digital support engineer.
+
+It systematically:
+
+* Understands symptoms
+* Retrieves relevant documentation
+* Asks follow-up questions
+* Eliminates unlikely causes
+* Suggests safe inspection steps
+* Diagnoses probable issues
+* Recommends solutions
+* Cites official documentation
+
+The result is a support experience that feels closer to speaking with a technician than searching through PDFs.
 
 ---
 
-## The Challenge
+# 🚨 Problem Statement
 
-Build a platform where companies can list their products and users can quickly find answers to product-related questions and issues.
+Every day users struggle with products such as:
 
-Think of it as a support portal where every product has an intelligent assistant built using the product's official documentation and support materials. However, this assistant should not behave like a simple chatbot or search engine. The assistant should function like a **mechanic, technician, or support engineer** who diagnoses issues through investigation and elimination rather than simply returning search results from documentation. The goal is to help users understand, maintain, troubleshoot, and resolve issues with their products using trusted manufacturer-provided information.
+* Routers
+* Printers
+* Air Conditioners
+* Washing Machines
+* Scooters
+* Water Purifiers
+* Consumer Electronics
 
----
+The information needed to solve their issues already exists.
 
-## Who Uses It
+The challenge is that it is scattered across:
 
-<table>
-<tr>
-<td width="50%" valign="top">
+* Product manuals
+* Service guides
+* Knowledge bases
+* Support websites
+* Videos
+* Technical documentation
 
-### Companies
+Traditional support systems force users to search through hundreds of pages of documentation.
 
-Any company that manufactures or sells a product should be able to:
-
-- Register and create a company account
-- Add products with names, categories, descriptions, and images
-- Upload support materials for each product:
-  - PDF manuals
-  - Text documents
-  - Images / videos
-  - External links (web pages, documentation sites, and YouTube videos)
-- Update or remove their content at any time
-
-</td>
-<td width="50%" valign="top">
-
-### Users
-
-Anyone who owns or is considering a product should be able to:
-
-- Browse and search for products on the platform
-- View product details and available documentation
-- Report issues and ask questions
-- Receive guidance from the product assistant
-
-</td>
-</tr>
-</table>
+Helix changes that.
 
 ---
 
-## What You Must Build
+# 💡 Our Solution
 
-### `1` — Product Marketplace
+Helix converts manufacturer documentation into a searchable knowledge repository and combines it with AI-powered diagnostic reasoning.
 
-A browsable catalog of products on the platform.
+Unlike a standard RAG chatbot:
 
-| Feature | Description |
-|---|---|
-| Product Listings | Companies can create product listings |
-| Browse & Search | Users can browse and search all products |
-| Product Pages | Each product has its own page showing full details and uploaded resources |
-
----
-
-### `2` — Knowledge Repository
-
-Each product has a set of support materials attached to it.
-
-- Companies can upload **PDFs, documents, images, videos, and external links**
-- All uploaded materials are associated with a specific product
-- Users can browse and download these materials from the product page
-- The assistant uses these materials to investigate issues and provide recommendations
-
----
-
-### `3` — Intelligent Diagnostic Assistant
-
-Each product should include a dedicated assistant capable of helping users identify and resolve issues through guided investigation.
-
-The assistant should not simply retrieve information from manuals and display it. Instead, it should behave like an experienced technician who **systematically diagnoses problems** using available product knowledge.
-
-#### Diagnostic Workflow
-
-When a user reports a problem, the assistant should:
-
-```
- 1  Understand the reported symptoms and context
- 2  Identify possible causes from available documentation
- 3  Ask follow-up questions to eliminate unlikely causes
- 4  Suggest safe inspection steps or tests
- 5  Evaluate user responses
- 6  Narrow down the most probable root causes
- 7  Recommend corrective actions
- 8  Provide supporting references from official documentation and resources
+```text
+Question
+   ↓
+Retrieve Docs
+   ↓
+Answer
 ```
 
-> The objective is to help users arrive at a likely diagnosis rather than simply presenting search results. Recommendations should be traceable to source materials whenever possible so users can verify the information.
+Helix follows a diagnostic workflow:
 
-#### Example — Scooter Horn Failure
-
-```
-User: "My scooter horn is not working."
-```
-
-Instead of immediately providing possible causes, the assistant may ask:
-
-```
-◆  Does the headlight work normally?
-◆  Is the horn completely silent or weak?
-◆  Did the issue start suddenly or gradually?
-◆  Has any electrical work been performed recently?
-```
-
-Based on the responses, the assistant may suggest:
-
-```
-"Please check whether Fuse F3 (10A) is intact. It is located beneath
- the front panel as shown in Figure 4.2 of the service manual."
+```text
+Question
+   ↓
+Retrieve Docs
+   ↓
+Investigate
+   ↓
+Ask Follow-Up Questions
+   ↓
+Eliminate Possibilities
+   ↓
+Diagnose
+   ↓
+Recommend Solution
 ```
 
-After receiving additional information, the assistant should continue narrowing down possible causes until a probable diagnosis is reached.
+This approach produces more accurate troubleshooting results and mimics the workflow of a real support technician.
 
 ---
 
-## Bonus Features
+# ✨ Core Features
 
-> Teams are not expected to build all of them. **Focus on building a smaller number of features well rather than implementing many incomplete features.**
+## 🏪 Product Marketplace
 
-<table>
-<tr>
-<td width="50%" valign="top">
+Companies can:
 
-**Maintenance Schedules & Product Ownership**
-Users can maintain a list of products they own. Users can add products they own to a personal inventory and receive maintenance reminders based on schedules defined by the company. The platform should track upcoming and overdue maintenance tasks, allow users to mark tasks as completed.
+* Register on the platform
+* Create products
+* Manage documentation
+* Upload support resources
 
----
+Users can:
 
-**Auto-extract Maintenance Schedules**
-When a company uploads manuals or service documentation, automatically identify maintenance schedules and tasks from the content. Extract: *"Replace filter every 12 months"* from uploaded documentation and suggest it to the company for approval before publishing.
-
----
-
-**Voice Input**
-Allow users to interact with the assistant using voice. The assistant should be capable of guiding users through troubleshooting procedures hands-free, similar to Alexa/Siri. It should provide detailed instructions and clearly describe component locations. *(e.g., A user places their phone nearby while repairing a scooter. The assistant guides them through each troubleshooting step using voice instructions.)*
+* Browse manufacturers
+* Explore products
+* Search product catalogs
+* Access support resources
 
 ---
 
-**Image-based Troubleshooting**
-Allow users to upload images of error screens, warning indicators, damaged components, or product parts. The assistant can use these images to assist with diagnosis and troubleshooting.
+## 📚 Knowledge Repository
+
+Supports:
+
+* PDF Manuals
+* Text Documents
+* Product Guides
+* Images
+* Videos
+* External Documentation Links
+
+All content is automatically indexed for retrieval.
 
 ---
 
-**Video Support**
-If a company uploads support videos, the assistant can direct users to the most relevant section. *(e.g., "Watch from 3:25 to 4:10 for the filter replacement procedure.")*
+## 🤖 AI Diagnostic Assistant
 
-</td>
-<td width="50%" valign="top">
+The heart of Helix.
 
-**Spare Part Suggestions**
-Based on the identified issue or product model, suggest compatible spare parts, replacement components, consumables, and accessories.
+Features:
 
----
+* Multi-turn troubleshooting
+* Diagnostic reasoning
+* Source citations
+* Context retention
+* Documentation-backed recommendations
+* Root cause analysis
 
-**Multi-language Support**
-Allow users to ask questions and receive guidance in languages other than English.
+Example:
 
----
+User:
 
-**Warranty and Recall Alerts**
-Notify users about warranty expiry dates, product recalls, safety notices, and service campaigns for products they own.
+```text
+My router is not connecting to the internet.
+```
 
----
+Assistant:
 
-**Product Health Score**
-Provide companies with insights into common user issues, frequently reported failures, product shortcomings, and support trends.
+```text
+• Are the WAN lights blinking?
+• Did the issue start recently?
+• Have you restarted the router?
+• Are other devices affected?
+```
 
----
-
-**Visual Guidance**
-Present troubleshooting procedures using images, diagrams, flowcharts, step-by-step visual instructions, interactive tutorials, animations, or 3D visualizations to improve the user experience.
-
-</td>
-</tr>
-</table>
-and many more...
+The assistant narrows down causes until a probable diagnosis is reached.
 
 ---
 
-## What a Great Submission Looks Like
+## 🌍 Multi-Language Support
 
-A strong submission will have a clean, working product that a non-technical person can navigate without confusion. Participants should smartly use MOSS in their solution. Participants are encouraged to use AI tools during development. What matters is the quality of the final product and how effectively it solves the problem, not how it was built.
+Users can interact in multiple languages while documentation remains indexed in English.
 
-Focus on building features that are **complete, reliable, and genuinely useful**. A smaller set of polished features is preferred over a large number of incomplete ones.
+Supported examples:
 
-When deciding what to build, ask yourself:
+* English
+* Hindi
+* Spanish
+* French
+* German
 
-> *"If I owned this product, would I actually use this platform to solve my problem?"*
+---
+
+## 📄 Citations & Handoff Briefs
+
+Every recommendation includes references to source documents.
+
+When escalation is required, Helix generates:
+
+* Issue Summary
+* Diagnostic History
+* Recommended Actions
+* Documentation References
+
+allowing support teams to continue seamlessly.
+
+---
+
+## 🧰 Product Ownership & Inventory
+
+Users can:
+
+* Track owned products
+* Monitor warranties
+* View maintenance schedules
+* Receive future recall alerts
+
+---
+
+# 📸 Screenshots
+
+## Landing Page
+
+![Landing Page](./screenshots/landing-page.png)
+
+---
+
+## Product Marketplace
+
+![Marketplace](./screenshots/marketplace.png)
+
+---
+
+## Product Inventory
+
+![Inventory](./screenshots/inventory.png)
+
+---
+
+## Company Support Portal
+
+![Support Portal](./screenshots/support-portal.png)
+
+---
+
+# 🏗️ System Architecture
+
+```text
+┌───────────────────────────────────────────────┐
+│                    HELIX                      │
+└───────────────────────────────────────────────┘
+
+                 ┌─────────────┐
+                 │   Browser   │
+                 │   Next.js   │
+                 └──────┬──────┘
+                        │
+                        ▼
+
+           ┌───────────────────────────┐
+           │     API / Server Layer    │
+           │      Server Actions       │
+           └─────────────┬─────────────┘
+                         │
+
+        ┌────────────────┼────────────────┐
+        ▼                ▼                ▼
+
+ ┌────────────┐   ┌────────────┐   ┌────────────┐
+ │   Prisma   │   │    MOSS    │   │    Groq    │
+ │  SQLite DB │   │ Retrieval  │   │ Llama 3.3  │
+ └────────────┘   └────────────┘   └────────────┘
+
+                         │
+                         ▼
+
+        ┌───────────────────────────────┐
+        │ Diagnostic AI Technician      │
+        │                               │
+        │ • Retrieve Documentation      │
+        │ • Ask Follow-Up Questions     │
+        │ • Eliminate Possibilities     │
+        │ • Diagnose Issues             │
+        │ • Recommend Fixes             │
+        │ • Cite Sources                │
+        └───────────────────────────────┘
+```
+
+---
+
+# 🧠 MOSS Integration
+
+MOSS powers every retrieval operation inside Helix.
+
+## Product Catalog Search
+
+```text
+User Search
+     ↓
+MOSS Product Catalog
+     ↓
+Relevant Products
+```
+
+---
+
+## Knowledge Base Retrieval
+
+```text
+User Query
+     ↓
+Product Knowledge Index
+     ↓
+Relevant Manual Sections
+```
+
+---
+
+## Session Memory
+
+```text
+Conversation
+      ↓
+MOSS Session Context
+      ↓
+Previous Diagnostic Steps
+```
+
+---
+
+## Diagnostic Flow
+
+```text
+User Reports Issue
+          ↓
+Retrieve Relevant Docs
+          ↓
+Retrieve Session Context
+          ↓
+Generate Questions
+          ↓
+Analyze Answers
+          ↓
+Determine Root Cause
+          ↓
+Recommend Solution
+          ↓
+Provide Citations
+```
+
+---
+
+# ⚙️ Tech Stack
+
+## Frontend
+
+* Next.js 15
+* React
+* TypeScript
+* CSS
+
+## Backend
+
+* Server Actions
+* API Routes
+* Node.js
+
+## Database
+
+* Prisma
+* SQLite
+
+## Retrieval Layer
+
+* MOSS
+
+## AI Layer
+
+* Groq SDK
+* Llama 3.3 70B
+
+## Authentication
+
+* NextAuth
+
+## Document Processing
+
+* pdf-parse
+
+---
+
+# 📂 Project Structure
+
+```bash
+src/
+├── app/
+├── actions/
+├── components/
+├── lib/
+├── types/
+├── prisma/
+└── uploads/
+```
+
+---
+
+# 🚀 Getting Started
+
+## Installation
+
+```bash
+git clone https://github.com/your-repository/helix.git
+
+cd helix
+
+npm install
+```
+
+---
+
+## Environment Variables
+
+```env
+DATABASE_URL=
+
+NEXTAUTH_SECRET=
+
+MOSS_PROJECT_ID=
+
+MOSS_PROJECT_KEY=
+
+GROQ_API_KEY=
+```
+
+---
+
+## Run Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+# 🎯 Future Scope
+
+* Voice Troubleshooting
+* Image-Based Diagnostics
+* Maintenance Reminder Engine
+* Spare Parts Recommendation System
+* Recall Alert System
+* Warranty Monitoring
+* Product Health Analytics
+
+---
+
+# 🏆 Why Helix?
+
+Most support systems provide answers.
+
+Helix provides diagnosis.
+
+Most chatbots retrieve documentation.
+
+Helix investigates problems.
+
+Most assistants stop at information.
+
+Helix guides users toward resolution.
+
+---
+
+# 👥 Team
+
+## Team Helix
+
+### Arpit
+
+### Ashutosh Mani Shukla
 
 ---
 
 <div align="center">
 
-<br/>
+### Built with ❤️ using MOSS, Next.js, Groq & TypeScript
 
-*BEST OF LUCK* &nbsp;·&nbsp; *PClub X MOSS*
-
-<br/>
+#### PClub × MOSS Hackathon 2026
 
 </div>
